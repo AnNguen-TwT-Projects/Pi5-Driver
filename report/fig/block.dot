@@ -1,0 +1,41 @@
+digraph G {
+  rankdir=TB; bgcolor=white; nodesep=0.35; ranksep=0.45;
+  node [shape=box, style="rounded,filled", fillcolor="#ffffff", fontname="Liberation Serif", fontsize=13, penwidth=1.2];
+  edge [fontname="Liberation Serif", fontsize=11, penwidth=1.2];
+
+  subgraph cluster_user {
+    label="User space"; fontname="Liberation Serif Bold"; fontsize=14; style="rounded"; color="#4a6fa5"; bgcolor="#eef3fa";
+    lcd_test [label="lcd_test\n(output test)"];
+    button_test [label="button_test\n(input test)"];
+    demo [label="demo\n(state machine, scrolling text)"];
+  }
+
+  dev [label="/dev/lcd2004\nopen / write / ioctl / read / poll", shape=box, style="filled", fillcolor="#fff3d6"];
+
+  subgraph cluster_kernel {
+    label="Linux kernel (6.18, bcm2712)"; fontname="Liberation Serif Bold"; fontsize=14; style="rounded"; color="#a5674a"; bgcolor="#faf1ec";
+    drv [label="lcd2004_btn driver\nLayer 3: Linux interface (misc device)\nLayer 2: HD44780 protocol\nLayer 1: I2C transfer", fillcolor="#ffe0cc"];
+    btn [label="Button path\nIRQ → delayed_work → kfifo → wait queue", fillcolor="#ffe0cc"];
+    i2ccore [label="I2C core\n(i2c_smbus_write_byte)"];
+    gpiolib [label="gpiolib + IRQ core\n(gpiod_*, request_irq)"];
+    dt [label="Device Tree overlay\nlcd2004-btn.dtbo", shape=note, fillcolor="#f2f2f2"];
+  }
+
+  subgraph cluster_hw {
+    label="Hardware"; fontname="Liberation Serif Bold"; fontsize=14; style="rounded"; color="#4a8a5a"; bgcolor="#eef7f0";
+    rp1 [label="Raspberry Pi 5\nRP1 I/O controller: I2C1 (GPIO2/3), GPIO17/27/22/23"];
+    shifter [label="BSS138 level shifter\n3.3 V ↔ 5 V"];
+    lcd [label="LCD2004 (HD44780)\n+ PCF8574 backpack @0x27"];
+    keys [label="4 push buttons\nactive-low, internal pull-up"];
+  }
+
+  lcd_test -> dev; button_test -> dev; demo -> dev;
+  dev -> drv [dir=both];
+  drv -> btn [style=invis];
+  drv -> i2ccore; btn -> gpiolib [dir=back, label=" interrupt"];
+  dt -> drv [style=dotted, label=" compatible =\n \"twt,lcd2004-btn\""];
+  i2ccore -> rp1; gpiolib -> rp1 [dir=back];
+  rp1 -> shifter [label=" SDA/SCL 3.3 V", dir=both];
+  shifter -> lcd [label=" SDA/SCL 5 V", dir=both];
+  rp1 -> keys [label=" GPIO level", dir=back];
+}

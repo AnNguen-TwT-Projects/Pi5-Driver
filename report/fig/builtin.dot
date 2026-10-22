@@ -1,0 +1,14 @@
+digraph G {
+  rankdir=LR; bgcolor=white; nodesep=0.25; ranksep=0.35;
+  node [shape=box, style="rounded,filled", fillcolor="#ffffff", fontname="Liberation Serif", fontsize=11.5, penwidth=1.2];
+  edge [penwidth=1.1];
+
+  a [label="1. Clone\nraspberrypi/linux\nrpi-6.18.y", fillcolor="#eef3fa"];
+  b [label="2. Copy driver to\ndrivers/auxdisplay/", fillcolor="#eef3fa"];
+  c [label="3. Add Kconfig entry\nand Makefile line", fillcolor="#eef3fa"];
+  d [label="4. bcm2712_defconfig\nLCD2004_BTN=y\nLOCALVERSION\n-v8-16k-lcd", fillcolor="#fff3d6"];
+  e [label="5. make Image.gz\nmodules\n(~70 min on Pi 5)", fillcolor="#ffe0cc"];
+  f [label="6. modules_install\ncopy Image.gz →\nkernel_lcd.img", fillcolor="#ffe0cc"];
+  g [label="7. kernel=kernel_lcd.img\nin config.txt,\nreboot, check HW-8", fillcolor="#eef7f0"];
+  a -> b -> c -> d -> e -> f -> g;
+}

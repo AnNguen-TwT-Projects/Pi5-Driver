@@ -60,7 +60,7 @@ Level shifter là module hai chiều BSS138 loại 4 kênh, nhưng chỉ dùng 2
 Quy ước cho mục 2 đến 6:
 
 - Mọi lệnh đều chạy **trên Pi5** (terminal của Pi hoặc SSH), không chạy trên laptop.
-- Repo được clone vào thư mục home, tức là `~/Pi5-Driver-Project`. Các lệnh bên dưới dùng đường dẫn đầy đủ này nên chạy ở đâu cũng được. Nếu clone ở chỗ khác thì sửa đường dẫn cho đúng.
+- Repo được clone vào thư mục home, tức là `~/Pi5-Driver`. Các lệnh bên dưới dùng đường dẫn đầy đủ này nên chạy ở đâu cũng được. Nếu clone ở chỗ khác thì sửa đường dẫn cho đúng.
 - Sửa file bằng `nano`: dùng phím mũi tên để di chuyển. Lưu bằng **Ctrl+O** rồi **Enter**, thoát bằng **Ctrl+X**.
 
 ### Bước 2.1. Cài gói cần thiết
@@ -106,17 +106,17 @@ Lệnh in ra một bảng số. Mỗi ô có thiết bị trả lời sẽ hiệ
 
 ```bash
 cd ~
-git clone https://github.com/AnNguen-TwT-Projects/Pi5-Driver-Project.git
+git clone https://github.com/AnNguen-TwT-Projects/Pi5-Driver.git
 ```
 
 Lệnh `clone` tự lấy nhánh `main`, là nhánh chứa code chính.
 
-Kết quả đúng: lệnh `ls ~/Pi5-Driver-Project` thấy các thư mục `driver`, `dts`, `app`, `include`.
+Kết quả đúng: lệnh `ls ~/Pi5-Driver` thấy các thư mục `driver`, `dts`, `app`, `include`.
 
 Nếu đã clone từ trước thì không clone lại, chỉ cần chuyển về `main` và cập nhật (bản clone cũ có thể đang ở nhánh `feature/lcd2004-driver`):
 
 ```bash
-cd ~/Pi5-Driver-Project
+cd ~/Pi5-Driver
 git checkout main
 git pull
 ```
@@ -130,18 +130,18 @@ Overlay là file mô tả phần cứng: "trên bus I2C1, ở địa chỉ `0x27
 ### Bước 3.1. Biên dịch overlay
 
 ```bash
-cd ~/Pi5-Driver-Project/dts
+cd ~/Pi5-Driver/dts
 dtc -@ -I dts -O dtb -o lcd2004-btn.dtbo lcd2004-btn-overlay.dts
 ```
 
 Lệnh này đọc file nguồn `lcd2004-btn-overlay.dts` (dạng chữ) và tạo ra file `lcd2004-btn.dtbo` (dạng nhị phân, là file firmware đọc được).
 
-Kết quả đúng: lệnh `ls ~/Pi5-Driver-Project/dts` thấy file `lcd2004-btn.dtbo`.
+Kết quả đúng: lệnh `ls ~/Pi5-Driver/dts` thấy file `lcd2004-btn.dtbo`.
 
 ### Bước 3.2. Chép overlay vào thư mục của firmware
 
 ```bash
-sudo cp ~/Pi5-Driver-Project/dts/lcd2004-btn.dtbo /boot/firmware/overlays/
+sudo cp ~/Pi5-Driver/dts/lcd2004-btn.dtbo /boot/firmware/overlays/
 ```
 
 Kết quả đúng: lệnh `ls /boot/firmware/overlays/lcd2004-btn.dtbo` in ra đúng tên file đó, không báo lỗi.
@@ -206,7 +206,7 @@ Lúc này **chưa có** `/dev/lcd2004` và LCD chưa hiện gì là đúng, vì 
 ### Bước 4.1. Build
 
 ```bash
-cd ~/Pi5-Driver-Project/driver
+cd ~/Pi5-Driver/driver
 make
 ```
 
@@ -215,7 +215,7 @@ Kết quả đúng: trong thư mục `driver` có file `lcd2004_btn.ko`, và lú
 ### Bước 4.2. Nạp driver
 
 ```bash
-sudo insmod ~/Pi5-Driver-Project/driver/lcd2004_btn.ko
+sudo insmod ~/Pi5-Driver/driver/lcd2004_btn.ko
 ```
 
 Kết quả đúng:
@@ -239,12 +239,12 @@ Phải dùng `| sudo tee`, không dùng `sudo echo "Hello" > /dev/lcd2004`. Ở 
 
 ## 5. Build và chạy chương trình thử
 
-Các lệnh từ bước 5.2 đến 5.4 chạy trong thư mục `~/Pi5-Driver-Project/app`. Driver phải đang được nạp (bước 4.2).
+Các lệnh từ bước 5.2 đến 5.4 chạy trong thư mục `~/Pi5-Driver/app`. Driver phải đang được nạp (bước 4.2).
 
 ### Bước 5.1. Build
 
 ```bash
-cd ~/Pi5-Driver-Project/app
+cd ~/Pi5-Driver/app
 make
 ```
 
@@ -299,7 +299,7 @@ Nếu báo `Module lcd2004_btn is in use` thì đóng chương trình đang mở
 Nạp lại driver bằng lệnh của bước 4.2:
 
 ```bash
-sudo insmod ~/Pi5-Driver-Project/driver/lcd2004_btn.ko
+sudo insmod ~/Pi5-Driver/driver/lcd2004_btn.ko
 ```
 
 ### Bước 6.2. Xóa hết để làm lại từ đầu
@@ -331,7 +331,7 @@ Làm trên Pi5, theo thứ tự ngược với lúc cài.
 4. Xóa mã nguồn trên Pi5 (bản trên GitHub và trên laptop không bị ảnh hưởng). Kiểm tra trước xem có sửa gì trên Pi mà chưa push không:
 
    ```bash
-   cd ~/Pi5-Driver-Project
+   cd ~/Pi5-Driver
    git status
    ```
 
@@ -339,13 +339,13 @@ Làm trên Pi5, theo thứ tự ngược với lúc cài.
 
    ```bash
    cd ~
-   rm -rf ~/Pi5-Driver-Project
+   rm -rf ~/Pi5-Driver
    ```
 
    Nếu muốn giữ repo, chỉ xóa các file đã build thì thay lệnh `rm -rf` ở trên bằng:
 
    ```bash
-   cd ~/Pi5-Driver-Project
+   cd ~/Pi5-Driver
    make -C driver clean
    make -C app clean
    rm -f dts/lcd2004-btn.dtbo

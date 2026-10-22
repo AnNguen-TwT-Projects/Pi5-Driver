@@ -43,7 +43,7 @@ sudo apt install -y git bc bison flex libssl-dev make libncurses-dev tmux
 Script nằm ở nhánh `feature/builtin-kernel` (chưa gộp vào `main`):
 
 ```bash
-cd ~/Pi5-Driver-Project
+cd ~/Pi5-Driver
 git fetch
 git checkout feature/builtin-kernel
 ```
@@ -53,7 +53,7 @@ git checkout feature/builtin-kernel
 ### 3.1. Thử nhanh trước (không build)
 
 ```bash
-cd ~/Pi5-Driver-Project
+cd ~/Pi5-Driver
 bash tools/build-builtin.sh --check
 ```
 
@@ -83,7 +83,7 @@ Build mất thời gian, nên chạy trong `tmux`: nếu SSH bị rớt hoặc l
 2. Gõ trong cửa sổ tmux đó:
 
    ```bash
-   cd ~/Pi5-Driver-Project
+   cd ~/Pi5-Driver
    time bash tools/build-builtin.sh
    ```
 
