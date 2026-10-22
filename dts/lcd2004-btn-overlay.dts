@@ -1,0 +1,52 @@
+// Overlay cho Raspberry Pi 5: LCD2004 (backpack I2C PCF8574) + 4 nút nhấn.
+// Biên dịch trên Pi5:
+//   dtc -@ -I dts -O dtb -o lcd2004-btn.dtbo lcd2004-btn-overlay.dts
+// Bật trong /boot/firmware/config.txt:
+//   dtparam=i2c_arm=on
+//   dtoverlay=lcd2004-btn            (địa chỉ mặc định 0x27)
+//   dtoverlay=lcd2004-btn,addr=0x3f  (nếu i2cdetect thấy 0x3f)
+
+/dts-v1/;
+/plugin/;
+
+/ {
+	compatible = "brcm,bcm2712";
+
+	// Fragment 0: bật pull-up nội cho 4 chân nút (nhả = mức 1, nhấn = mức 0)
+	fragment@0 {
+		target = <&gpio>;
+		__overlay__ {
+			lcd_btn_pins: lcd_btn_pins {
+				brcm,pins = <17 27 22 23>;  // nút 1, 2, 3, 4
+				brcm,function = <0>;        // 0 = input
+				brcm,pull = <2>;            // 2 = pull-up
+			};
+		};
+	};
+
+	// Fragment 1: khai báo LCD là thiết bị con trên bus I2C1 (pin 3, 5)
+	fragment@1 {
+		target = <&i2c_arm>;
+		__overlay__ {
+			#address-cells = <1>;
+			#size-cells = <0>;
+			status = "okay";
+
+			lcd: lcd2004@27 {
+				compatible = "twt,lcd2004-btn";
+				reg = <0x27>;
+				pinctrl-names = "default";
+				pinctrl-0 = <&lcd_btn_pins>;
+				// Thứ tự cố định: nút 1, 2, 3, 4
+				// Cờ 1 = GPIO_ACTIVE_LOW: nhấn (mức 0) được đọc là 1
+				button-gpios = <&gpio 17 1>, <&gpio 27 1>,
+					       <&gpio 22 1>, <&gpio 23 1>;
+				status = "okay";
+			};
+		};
+	};
+
+	__overrides__ {
+		addr = <&lcd>, "reg:0";
+	};
+};

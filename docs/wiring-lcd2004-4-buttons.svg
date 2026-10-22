@@ -1,0 +1,155 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 826" width="1200" height="826" role="img" aria-label="Sơ đồ nối dây Raspberry Pi 5 với LCD2004 qua level shifter BSS138 và mạch 4 nút nhấn (cấp 3.3V) trên GPIO17, 27, 22, 23" font-family="Segoe UI, Arial, sans-serif" font-size="13" fill="#24292f">
+  <rect x="0" y="0" width="1200" height="826" fill="#ffffff"/>
+
+  <!-- Tiêu đề -->
+  <text x="40" y="44" font-size="22" font-weight="600">Sơ đồ nối dây: Pi 5 + LCD2004 (I2C) + mạch 4 nút</text>
+
+  <!-- ===== Raspberry Pi 5 ===== -->
+  <rect x="40" y="90" width="230" height="600" rx="8" fill="#f6f8fa" stroke="#24292f" stroke-width="2"/>
+  <text x="60" y="118" font-size="16" font-weight="600">Raspberry Pi 5</text>
+  <text x="60" y="136" font-size="11" fill="#57606a">header 40 chân</text>
+  <g font-size="12" text-anchor="end">
+    <text x="258" y="134">pin 2 · 5V</text>
+    <text x="258" y="174">pin 3 · GPIO2 SDA</text>
+    <text x="258" y="214">pin 5 · GPIO3 SCL</text>
+    <text x="258" y="254">pin 1 · 3V3</text>
+    <text x="258" y="294">pin 6 · GND</text>
+    <text x="258" y="394">pin 17 · 3V3</text>
+    <text x="258" y="434">pin 11 · GPIO17</text>
+    <text x="258" y="494">pin 13 · GPIO27</text>
+    <text x="258" y="554">pin 15 · GPIO22</text>
+    <text x="258" y="614">pin 16 · GPIO23</text>
+    <text x="258" y="664">pin 9 · GND</text>
+  </g>
+  <g fill="#24292f">
+    <rect x="266" y="126" width="8" height="8"/><rect x="266" y="166" width="8" height="8"/>
+    <rect x="266" y="206" width="8" height="8"/><rect x="266" y="246" width="8" height="8"/>
+    <rect x="266" y="286" width="8" height="8"/><rect x="266" y="386" width="8" height="8"/><rect x="266" y="426" width="8" height="8"/>
+    <rect x="266" y="486" width="8" height="8"/><rect x="266" y="546" width="8" height="8"/>
+    <rect x="266" y="606" width="8" height="8"/><rect x="266" y="656" width="8" height="8"/>
+  </g>
+
+  <!-- ===== Dây nguồn và I2C ===== -->
+  <g fill="none" stroke-width="3" stroke-linecap="round">
+    <path d="M274,130 H700" stroke="#cf222e"/>
+    <!-- 5V xuống chân HV, nhảy qua hai dây I2C tím (y=170, y=210) -->
+    <path d="M612,130 V164 a6,6 0 0 1 0,12 V204 a6,6 0 0 1 0,12 V250 H600" stroke="#cf222e"/>
+    <path d="M274,170 H420" stroke="#0969da"/>
+    <path d="M274,210 H420" stroke="#0969da"/>
+    <path d="M274,250 H420" stroke="#e08a00"/>
+    <path d="M274,290 H420" stroke="#24292f"/>
+    <path d="M600,170 H700" stroke="#8250df"/>
+    <path d="M600,210 H700" stroke="#8250df"/>
+    <path d="M600,290 H700" stroke="#24292f"/>
+  </g>
+  <circle cx="612" cy="130" r="5" fill="#cf222e"/>
+  <g font-size="11" fill="#57606a" text-anchor="middle">
+    <text x="345" y="163">SDA 3.3V</text>
+    <text x="345" y="203">SCL 3.3V</text>
+    <text x="656" y="163">SDA 5V</text>
+    <text x="656" y="203">SCL 5V</text>
+    <text x="480" y="123">5V cho LCD + phía HV</text>
+  </g>
+
+  <!-- ===== Level shifter ===== -->
+  <!-- Thứ tự chân theo chữ in trên module thật: HV1,HV2,HV,GND,HV3,HV4 / LV1,LV2,LV,GND,LV3,LV4 -->
+  <rect x="420" y="150" width="180" height="188" rx="6" fill="#fff8e6" stroke="#24292f" stroke-width="2"/>
+  <g font-size="12">
+    <text x="430" y="174">LV1</text><text x="430" y="214">LV2</text>
+    <text x="430" y="254">LV</text><text x="430" y="294">GND</text>
+  </g>
+  <g font-size="12" text-anchor="end">
+    <text x="590" y="174">HV1</text><text x="590" y="214">HV2</text>
+    <text x="590" y="254">HV</text><text x="590" y="294">GND</text>
+  </g>
+  <text x="510" y="236" text-anchor="middle" font-weight="600">BSS138</text>
+  <text x="510" y="326" text-anchor="middle" font-size="10" fill="#57606a">LV3, LV4 / HV3, HV4: không dùng</text>
+  <text x="510" y="355" text-anchor="middle" font-size="11" fill="#57606a">Level shifter 2 chiều · dùng 2 / 4 kênh</text>
+
+  <!-- ===== Backpack PCF8574 ===== -->
+  <rect x="700" y="110" width="130" height="200" rx="6" fill="#eef4ff" stroke="#24292f" stroke-width="2"/>
+  <g font-size="12">
+    <text x="710" y="134">VCC</text><text x="710" y="174">SDA</text>
+    <text x="710" y="214">SCL</text><text x="710" y="294">GND</text>
+  </g>
+  <text x="790" y="250" text-anchor="middle" font-weight="600">PCF8574</text>
+  <text x="790" y="266" text-anchor="middle" font-size="11" fill="#57606a">0x27 / 0x3F</text>
+  <text x="765" y="100" text-anchor="middle" font-size="12">Backpack I2C</text>
+
+  <!-- Backpack hàn vào LCD -->
+  <g stroke="#57606a" stroke-width="2">
+    <line x1="830" y1="150" x2="860" y2="150"/><line x1="830" y1="174" x2="860" y2="174"/>
+    <line x1="830" y1="198" x2="860" y2="198"/><line x1="830" y1="222" x2="860" y2="222"/>
+    <line x1="830" y1="246" x2="860" y2="246"/><line x1="830" y1="270" x2="860" y2="270"/>
+  </g>
+  <text x="845" y="330" text-anchor="middle" font-size="11" fill="#57606a">hàn 16 chân</text>
+
+  <!-- ===== LCD2004: màn hình danh sách thành viên của demo ===== -->
+  <text x="1015" y="90" text-anchor="middle" font-size="14" font-weight="600">LCD2004 (20 × 4) · màn hình demo</text>
+  <rect x="860" y="100" width="310" height="200" rx="6" fill="#2f7d32" stroke="#1b4d1e" stroke-width="2"/>
+  <g fill="#c8e6c9"><circle cx="872" cy="112" r="5"/><circle cx="1158" cy="112" r="5"/><circle cx="872" cy="288" r="5"/><circle cx="1158" cy="288" r="5"/></g>
+  <rect x="880" y="125" width="270" height="150" rx="3" fill="#1c1c1c"/>
+  <rect x="890" y="135" width="250" height="130" fill="#2457c5"/>
+  <g font-family="Consolas, 'Courier New', monospace" font-size="19" fill="#e8f0ff">
+    <text x="896" y="163">Danh Sach Thanh Vien</text>
+    <text x="896" y="223">&#160;&#160;1&#160;&#160;&#160;&#160;2&#160;&#160;&#160;&#160;3&#160;&#160;&#160;&#160;4</text>
+  </g>
+
+  <!-- ===== Mạch 4 nút nhấn 6x6 V3 (V, G, 1..4) ===== -->
+  <path d="M274,390 H440" fill="none" stroke="#e08a00" stroke-width="3" stroke-linecap="round"/>
+  <g fill="none" stroke="#1a7f37" stroke-width="3" stroke-linecap="round">
+    <path d="M274,430 H440"/><path d="M274,490 H440"/>
+    <path d="M274,550 H440"/><path d="M274,610 H440"/>
+  </g>
+  <path d="M274,660 H440" fill="none" stroke="#24292f" stroke-width="3" stroke-linecap="round"/>
+  <text x="357" y="382" text-anchor="middle" font-size="11" font-weight="600" fill="#cf222e">V = 3.3V, KHÔNG nối 5V</text>
+
+  <rect x="440" y="370" width="200" height="310" rx="6" fill="#f5efff" stroke="#6f42c1" stroke-width="2"/>
+  <text x="565" y="395" text-anchor="middle" font-size="12" font-weight="600" fill="#6f42c1">Mạch 4 nút 6×6 V3</text>
+  <g fill="#24292f">
+    <rect x="436" y="386" width="8" height="8"/><rect x="436" y="426" width="8" height="8"/>
+    <rect x="436" y="486" width="8" height="8"/><rect x="436" y="546" width="8" height="8"/>
+    <rect x="436" y="606" width="8" height="8"/><rect x="436" y="656" width="8" height="8"/>
+  </g>
+  <g font-size="12" font-weight="600">
+    <text x="454" y="394">V</text><text x="454" y="434">1</text><text x="454" y="494">2</text>
+    <text x="454" y="554">3</text><text x="454" y="614">4</text><text x="454" y="664">G</text>
+  </g>
+  <!-- Nút 6x6 trên mạch -->
+  <g stroke="#24292f" stroke-width="1.5">
+    <rect x="536" y="416" width="28" height="28" rx="2" fill="#d0d7de"/><circle cx="550" cy="430" r="8" fill="#24292f"/>
+    <rect x="536" y="476" width="28" height="28" rx="2" fill="#d0d7de"/><circle cx="550" cy="490" r="8" fill="#24292f"/>
+    <rect x="536" y="536" width="28" height="28" rx="2" fill="#d0d7de"/><circle cx="550" cy="550" r="8" fill="#24292f"/>
+    <rect x="536" y="596" width="28" height="28" rx="2" fill="#d0d7de"/><circle cx="550" cy="610" r="8" fill="#24292f"/>
+  </g>
+  <g font-size="12" font-weight="600" text-anchor="middle">
+    <text x="605" y="434">SW1</text><text x="605" y="494">SW2</text>
+    <text x="605" y="554">SW3</text><text x="605" y="614">SW4</text>
+  </g>
+
+  <!-- Bảng chức năng nút, mỗi hàng thẳng với nút tương ứng -->
+  <rect x="680" y="372" width="490" height="268" rx="6" fill="#f6f8fa" stroke="#d0d7de"/>
+  <g font-size="12" font-weight="600" fill="#57606a">
+    <text x="696" y="396">Nút</text><text x="750" y="396">Chân</text><text x="880" y="396">Chức năng trong demo</text>
+  </g>
+  <line x1="680" y1="406" x2="1170" y2="406" stroke="#d0d7de"/>
+  <g font-size="13">
+    <text x="696" y="434" font-weight="600">SW1</text><text x="750" y="434">GPIO17 (pin 11)</text><text x="880" y="434"><tspan font-weight="600">LÊN</tspan> (mã 'U') · thành viên 1</text>
+    <text x="696" y="494" font-weight="600">SW2</text><text x="750" y="494">GPIO27 (pin 13)</text><text x="880" y="494"><tspan font-weight="600">XUỐNG</tspan> (mã 'D') · thành viên 2</text>
+    <text x="696" y="554" font-weight="600">SW3</text><text x="750" y="554">GPIO22 (pin 15)</text><text x="880" y="554"><tspan font-weight="600">CHỌN</tspan> (mã 'S') · thành viên 3</text>
+    <text x="696" y="614" font-weight="600">SW4</text><text x="750" y="614">GPIO23 (pin 16)</text><text x="880" y="614"><tspan font-weight="600">QUAY LẠI</tspan> (mã 'B') · thành viên 4</text>
+  </g>
+
+  <!-- ===== Chú thích màu dây ===== -->
+  <g font-size="12" stroke-width="3" stroke-linecap="round">
+    <line x1="40" y1="726" x2="70" y2="726" stroke="#cf222e"/><text x="78" y="730" stroke="none">5V</text>
+    <line x1="120" y1="726" x2="150" y2="726" stroke="#e08a00"/><text x="158" y="730" stroke="none">3.3V</text>
+    <line x1="210" y1="726" x2="240" y2="726" stroke="#0969da"/><text x="248" y="730" stroke="none">I2C phía Pi (3.3V)</text>
+    <line x1="380" y1="726" x2="410" y2="726" stroke="#8250df"/><text x="418" y="730" stroke="none">I2C phía LCD (5V)</text>
+    <line x1="550" y1="726" x2="580" y2="726" stroke="#1a7f37"/><text x="588" y="730" stroke="none">tín hiệu nút (3.3V)</text>
+    <line x1="720" y1="726" x2="750" y2="726" stroke="#24292f"/><text x="758" y="730" stroke="none">GND</text>
+  </g>
+  <text x="40" y="758" font-size="12" fill="#57606a">Tắt nguồn Pi khi cắm/rút dây · Không đưa 5V vào bất kỳ chân GPIO nào · Xác nhận địa chỉ LCD bằng i2cdetect -y 1</text>
+  <text x="40" y="780" font-size="12" fill="#57606a">Mạch nút: đo chân 1–4 trước khi nối. Thả ≈ 3.3V, nhấn = 0V → active-low (khớp driver). Ngược lại → đổi DT sang GPIO_ACTIVE_HIGH và pull-down</text>
+  <text x="40" y="802" font-size="12" fill="#57606a">Level shifter: thứ tự chân in trên module (trên xuống): HV1 HV2 HV GND HV3 HV4 | LV1 LV2 LV GND LV3 LV4 · LV nối 3V3, HV nối 5V</text>
+</svg>

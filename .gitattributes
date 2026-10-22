@@ -1,2 +1,4 @@
-# Auto detect text files and perform LF normalization
-* text=auto
+# Script và Makefile chạy trên Linux phải giữ xuống dòng LF
+*.sh     text eol=lf
+Makefile text eol=lf
+*.dts    text eol=lf

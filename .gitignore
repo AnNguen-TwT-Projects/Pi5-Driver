@@ -1,0 +1,18 @@
+# Sản phẩm build kernel module
+*.o
+*.ko
+*.mod
+*.mod.c
+*.cmd
+.*.cmd
+Module.symvers
+modules.order
+.tmp_versions/
+
+# Overlay đã biên dịch
+*.dtbo
+
+# Chương trình đã build trong app/
+app/lcd_test
+app/button_test
+app/demo
